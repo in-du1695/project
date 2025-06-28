@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare - Book Doctor Appointments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .time-slot.selected {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-heartbeat text-3xl"></i>
+                    <h1 class="text-2xl font-bold">MediCare</h1>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="hover:text-blue-200 font-medium">Home</a>
+                    <a href="#" class="hover:text-blue-200 font-medium">Doctors</a>
+                    <a href="#" class="hover:text-blue-200 font-medium">Services</a>
+                    <a href="#" class="hover:text-blue-200 font-medium">About</a>
+                    <a href="#" class="hover:text-blue-200 font-medium">Contact</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+    <button class="md:hidden text-white focus:outline-none">
+        <i class="fas fa-bars text-2xl"></i>
+    </button>
+    <button class="hidden md:block bg-white text-blue-600 px-4 py-2 rounded-full font-medium hover:bg-blue-50 transition">Login</button>
+    <button id="toggleAppointmentsBtn" class="hidden md:block bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-medium hover:bg-blue-200 transition">
+        Show Previous Appointments
+    </button>
+</div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Find & Book Appointment With Your Favorite Doctor</h2>
+                <p class="text-xl mb-8 text-blue-100">Access to 3000+ healthcare providers at your fingertips. Book appointments instantly, 24/7.</p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button class="bg-white text-blue-600 px-6 py-3 rounded-full font-bold hover:bg-blue-50 transition">Book Now</button>
+                    <button class="border-2 border-white text-white px-6 py-3 rounded-full font-bold hover:bg-white hover:text-blue-600 transition">Learn More</button>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <img src="https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg" alt="Doctor illustration" class="w-full max-w-md">
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="container mx-auto px-4 py-12 -mt-10">
+        <div class="bg-white rounded-xl shadow-xl p-6 md:p-8">
+            <h3 class="text-2xl font-bold mb-6 text-gray-800">Find Your Doctor</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="relative">
+                    <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
+                        <option>Select Specialty</option>
+                        <option>Cardiology</option>
+                        <option>Dermatology</option>
+                        <option>Neurology</option>
+                        <option>Pediatrics</option>
+                        <option>Orthopedics</option>
+                        <option>Dermatologist</option>
+                        <option>Obstetrics and gynaecology</option>
+                        <option>Endocrinologist</option>
+                    </select>
+                    <i class="fas fa-chevron-down absolute right-3 top-4 text-gray-400"></i>
+                </div>
+                <div class="relative">
+                    <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none">
+                        <option>Select Location</option>
+                        <option>New York</option>
+                        <option>Los Angeles</option>
+                        <option>Chicago</option>
+                        <option>Houston</option>
+                        <option>Phoenix</option>
+                        <option>Chennai</option>
+                        <option>Bangalore</option>
+                        <option>Vishakapatnam</option>
+                    </select>
+                    <i class="fas fa-chevron-down absolute right-3 top-4 text-gray-400"></i>
+                </div>
+                <div class="relative">
+                    <input type="date" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <button class="bg-blue-600 text-white p-3 rounded-lg font-medium hover:bg-blue-700 transition">Search Doctors</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Doctors -->
+    <section class="container mx-auto px-4 py-12">
+        <div class="flex justify-between items-center mb-10">
+            <h3 class="text-3xl font-bold text-gray-800">Our Popular Doctors</h3>
+            <a href="#" class="text-blue-600 font-medium hover:underline">View All</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Doctor Card 1 -->
+            <div class="doctor-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
+                <div class="relative">
+                    <img src="https://img.freepik.com/free-photo/doctor-with-his-arms-crossed-white-background_1368-5790.jpg" alt="Dr. Sarah Johnson" class="w-full h-64 object-cover">
+                    <div class="absolute top-4 right-4 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                        <i class="fas fa-star text-yellow-500 mr-1"></i> 4.9
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h4 class="text-xl font-bold text-gray-800 mb-1">Dr. Sarah Johnson</h4>
+                    <p class="text-gray-600 mb-3">Cardiologist</p>
+                    <div class="flex items-center text-gray-500 mb-4">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <span>New York Medical Center</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-600 font-bold">$120/session</span>
+                        <button class="book-btn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition" data-doctor="Dr. Sarah Johnson">Book Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Doctor Card 2 -->
+            <div class="doctor-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
+                <div class="relative">
+                    <img src="https://img.freepik.com/free-photo/portrait-confident-male-doctor-man_171337-1485.jpg" alt="Dr. Michael Chen" class="w-full h-64 object-cover">
+                    <div class="absolute top-4 right-4 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                        <i class="fas fa-star text-yellow-500 mr-1"></i> 4.8
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h4 class="text-xl font-bold text-gray-800 mb-1">Dr. Michael Chen</h4>
+                    <p class="text-gray-600 mb-3">Neurologist</p>
+                    <div class="flex items-center text-gray-500 mb-4">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <span>Chicago General Hospital</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-600 font-bold">$150/session</span>
+                        <button class="book-btn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition" data-doctor="Dr. Michael Chen">Book Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Doctor Card 3 -->
+            <div class="doctor-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
+                <div class="relative">
+                    <img src="https://img.freepik.com/free-photo/beautiful-young-female-doctor-looking-camera-office_1301-7807.jpg" alt="Dr. Emily Wilson" class="w-full h-64 object-cover">
+                    <div class="absolute top-4 right-4 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                        <i class="fas fa-star text-yellow-500 mr-1"></i> 4.7
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h4 class="text-xl font-bold text-gray-800 mb-1">Dr. Emily Wilson</h4>
+                    <p class="text-gray-600 mb-3">Pediatrician</p>
+                    <div class="flex items-center text-gray-500 mb-4">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <span>Los Angeles Children's Hospital</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-600 font-bold">$100/session</span>
+                        <button class="book-btn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition" data-doctor="Dr. Emily Wilson">Book Now</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="doctor-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
+  <div class="relative">
+    <img src="https://img.freepik.com/free-photo/portrait-happy-smiling-female-doctor-hospital_1301-7808.jpg" alt="Dr. Anjali Mehra" class="w-full h-64 object-cover">
+    <div class="absolute top-4 right-4 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+      <i class="fas fa-star text-yellow-500 mr-1"></i> 4.8
+    </div>
+  </div>
+  <div class="p-6">
+    <h4 class="text-xl font-bold text-gray-800 mb-1">Dr. Anjali Mehra</h4>
+    <p class="text-gray-600 mb-3">Gynecologist</p>
+    <div class="flex items-center text-gray-500 mb-4">
+      <i class="fas fa-map-marker-alt mr-2"></i>
+      <span>Sunrise Hospital, Delhi</span>
+    </div>
+    <div class="flex justify-between items-center">
+      <span class="text-blue-600 font-bold">$110/session</span>
+      <button class="book-btn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition" data-doctor="Dr. Anjali Mehra">Book Now</button>
+    </div>
+  </div>
+</div>
+
+<div class="doctor-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
+  <div class="relative">
+    <img src="https://img.freepik.com/free-photo/handsome-doctor-smiling-hospital-corridor_1098-21185.jpg" alt="Dr. Ravi Kumar" class="w-full h-64 object-cover">
+    <div class="absolute top-4 right-4 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+      <i class="fas fa-star text-yellow-500 mr-1"></i> 4.7
+    </div>
+  </div>
+  <div class="p-6">
+    <h4 class="text-xl font-bold text-gray-800 mb-1">Dr. Ravi Kumar</h4>
+    <p class="text-gray-600 mb-3">Orthopedic Surgeon</p>
+    <div class="flex items-center text-gray-500 mb-4">
+      <i class="fas fa-map-marker-alt mr-2"></i>
+      <span>Fortis Hospital, Bangalore</span>
+    </div>
+    <div class="flex justify-between items-center">
+      <span class="text-blue-600 font-bold">$140/session</span>
+      <button class="book-btn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition" data-doctor="Dr. Ravi Kumar">Book Now</button>
+    </div>
+  </div>
+</div>
+
+<div class="doctor-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
+  <div class="relative">
+    <img src="https://img.freepik.com/free-photo/doctor-woman-working-hospital_1303-17747.jpg" alt="Dr. Sneha Roy" class="w-full h-64 object-cover">
+    <div class="absolute top-4 right-4 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+      <i class="fas fa-star text-yellow-500 mr-1"></i> 4.6
+    </div>
+  </div>
+  <div class="p-6">
+    <h4 class="text-xl font-bold text-gray-800 mb-1">Dr. Sneha Roy</h4>
+    <p class="text-gray-600 mb-3">Psychiatrist</p>
+    <div class="flex items-center text-gray-500 mb-4">
+      <i class="fas fa-map-marker-alt mr-2"></i>
+      <span>MindCare Clinic, Mumbai</span>
+    </div>
+    <div class="flex justify-between items-center">
+      <span class="text-blue-600 font-bold">$125/session</span>
+      <button class="book-btn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition" data-doctor="Dr. Sneha Roy">Book Now</button>
+    </div>
+  </div>
+</div>
+
+<div class="doctor-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
+  <div class="relative">
+    <img src="https://img.freepik.com/free-photo/doctor-standing-with-folded-hands_1098-19662.jpg" alt="Dr. Arjun Desai" class="w-full h-64 object-cover">
+    <div class="absolute top-4 right-4 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+      <i class="fas fa-star text-yellow-500 mr-1"></i> 5.0
+    </div>
+  </div>
+  <div class="p-6">
+    <h4 class="text-xl font-bold text-gray-800 mb-1">Dr. Arjun Desai</h4>
+    <p class="text-gray-600 mb-3">Oncologist</p>
+    <div class="flex items-center text-gray-500 mb-4">
+      <i class="fas fa-map-marker-alt mr-2"></i>
+      <span>Tata Memorial Hospital, Mumbai</span>
+    </div>
+    <div class="flex justify-between items-center">
+      <span class="text-blue-600 font-bold">$160/session</span>
+      <button class="book-btn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition" data-doctor="Dr. Arjun Desai">Book Now</button>
+    </div>
+  </div>
+</div>
+
+            
+            <!-- Doctor Card 4 -->
+            <div class="doctor-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
+                <div class="relative">
+                    <img src="https://img.freepik.com/free-photo/portrait-mature-doctor_23-2148847888.jpg" alt="Dr. Robert Garcia" class="w-full h-64 object-cover">
+                    <div class="absolute top-4 right-4 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                        <i class="fas fa-star text-yellow-500 mr-1"></i> 4.9
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h4 class="text-xl font-bold text-gray-800 mb-1">Dr. Robert Garcia</h4>
+                    <p class="text-gray-600 mb-3">Dermatologist</p>
+                    <div class="flex items-center text-gray-500 mb-4">
+                        <i class="fas fa-map-marker-alt mr-2"></i>
+                        <span>Houston Skin Clinic</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-600 font-bold">$130/session</span>
+                        <button class="book-btn bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition" data-doctor="Dr. Robert Garcia">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="bg-gray-100 py-16">
+        <div class="container mx-auto px-4">
+            <h3 class="text-3xl font-bold text-center text-gray-800 mb-12">How It Works</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-search text-blue-600 text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-gray-800">Find a Doctor</h4>
+                    <p class="text-gray-600">Search by specialty, location, or doctor name to find the right healthcare provider for your needs.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="far fa-calendar-alt text-blue-600 text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-gray-800">Book Appointment</h4>
+                    <p class="text-gray-600">View real-time availability and book appointments instantly with just a few clicks.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-sm text-center">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-user-md text-blue-600 text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-gray-800">Visit Doctor</h4>
+                    <p class="text-gray-600">Receive confirmation and reminders, then visit your doctor at the scheduled time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Section -->
+<section class="container mx-auto px-4 py-12" id="login">
+  <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-md">
+    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Login to Your Account</h2>
+    <form id="loginForm">
+      <div class="mb-4">
+        <label class="block text-gray-700 font-medium mb-2" for="email">Email Address</label>
+        <input type="email" id="email" placeholder="you@example.com"
+               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div class="mb-6">
+        <label class="block text-gray-700 font-medium mb-2" for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password"
+               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <button type="submit"
+              class="w-full bg-blue-600 text-white p-3 rounded-lg font-medium hover:bg-blue-700 transition">
+        Login
+      </button>
+    </form>
+  </div>
+</section>
+<!-- User Details Form Section -->
+<section id="userDetailsSection" class="hidden container mx-auto px-4 py-12">
+  <div class="max-w-lg mx-auto bg-white p-8 rounded-xl shadow-md">
+    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Enter Your Details</h2>
+    <form id="userDetailsForm">
+      <div class="mb-4">
+        <label for="name" class="block text-gray-700 font-medium mb-2">Name</label>
+        <input type="text" id="name" class="w-full p-3 border rounded-lg" required>
+      </div>
+      <div class="mb-4">
+        <label for="age" class="block text-gray-700 font-medium mb-2">Age</label>
+        <input type="number" id="age" class="w-full p-3 border rounded-lg" required>
+      </div>
+      <div class="mb-4">
+        <label for="sex" class="block text-gray-700 font-medium mb-2">Sex</label>
+        <select id="sex" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label for="address" class="block text-gray-700 font-medium mb-2">Address</label>
+        <textarea id="address" rows="3" class="w-full p-3 border rounded-lg" required></textarea>
+      </div>
+      <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg font-medium hover:bg-blue-700 transition">
+        Save Details
+      </button>
+    </form>
+  </div>
+</section>               
+
+
+    <!-- Testimonials -->
+    <section class="container mx-auto px-4 py-16">
+        <h3 class="text-3xl font-bold text-center text-gray-800 mb-12">What Our Patients Say</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white p-8 rounded-xl shadow-sm">
+                <div class="flex items-center mb-6">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Patient" class="w-16 h-16 rounded-full object-cover mr-4">
+                    <div>
+                        <h4 class="font-bold text-gray-800">Jennifer Lopez</h4>
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-600">"Booking through MediCare was so easy and convenient. I was able to find a great cardiologist near me and get an appointment the same day. The doctor was professional and caring."</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-sm">
+                <div class="flex items-center mb-6">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Patient" class="w-16 h-16 rounded-full object-cover mr-4">
+                    <div>
+                        <h4 class="font-bold text-gray-800">David Miller</h4>
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-600">"I've used several online booking systems before, but MediCare stands out with its simple interface and reliable service. The reminder notifications are especially helpful."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-3xl md:text-4xl font-bold mb-6">Ready to Book Your Appointment?</h3>
+            <p class="text-xl mb-8 max-w-2xl mx-auto text-blue-100">Join thousands of patients who have found their perfect doctor through MediCare.</p>
+            <button class="bg-white text-blue-600 px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition text-lg">Find a Doctor Now</button>
+        </div>
+    </section>
+
+
+    <!-- Previous Appointments Section -->
+<section id="previousAppointments" class="hidden container mx-auto px-4 py-12">
+  <h3 class="text-2xl font-bold text-gray-800 mb-4">Previous Appointments</h3>
+  <div id="appointmentsList" class="space-y-4"></div>
+</section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-heartbeat text-3xl text-blue-400"></i>
+                        <h4 class="text-2xl font-bold">MediCare</h4>
+                    </div>
+                    <p class="text-gray-400 mb-4">Making healthcare accessible and convenient for everyone.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="text-lg font-bold mb-4">Quick Links</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Services</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Doctors</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-lg font-bold mb-4">Services</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Cardiology</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Neurology</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Pediatrics</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Dermatology</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Orthopedics</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-lg font-bold mb-4">Contact Us</h5>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3"></i>
+                            <span>123 Medical Drive, Suite 100, New York, NY 10001</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-3"></i>
+                            <span>(555) 123-4567</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3"></i>
+                            <span>info@medicare.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 MediCare. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 pointer-events-none transition">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 id="modalDoctorName" class="text-2xl font-bold text-gray-800">Book Appointment</h3>
+                    <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2">Select Date</label>
+                    <input type="date" id="appointmentDate" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2">Available Time Slots</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button class="time-slot border border-gray-300 p-2 rounded-lg hover:bg-gray-100">9:00 AM</button>
+                        <button class="time-slot border border-gray-300 p-2 rounded-lg hover:bg-gray-100">10:00 AM</button>
+                        <button class="time-slot border border-gray-300 p-2 rounded-lg hover:bg-gray-100">11:00 AM</button>
+                        <button class="time-slot border border-gray-300 p-2 rounded-lg hover:bg-gray-100">1:00 PM</button>
+                        <button class="time-slot border border-gray-300 p-2 rounded-lg hover:bg-gray-100">2:00 PM</button>
+                        <button class="time-slot border border-gray-300 p-2 rounded-lg hover:bg-gray-100">3:00 PM</button>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2">Reason for Visit</label>
+                    <textarea class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" placeholder="Briefly describe your symptoms or reason for visit"></textarea>
+                </div>
+                <div class="mb-4">
+  <label class="block text-gray-700 font-medium mb-2">Full Name</label>
+  <input type="text" id="userName" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Enter your full name">
+</div>
+
+<div class="mb-4">
+  <label class="block text-gray-700 font-medium mb-2">Age</label>
+  <input type="number" id="userAge" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Enter your age">
+</div>
+
+<div class="mb-4">
+  <label class="block text-gray-700 font-medium mb-2">Sex</label>
+  <select id="userSex" class="w-full p-3 border border-gray-300 rounded-lg">
+    <option value="">Select</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Other">Other</option>
+  </select>
+</div>
+
+<div class="mb-4">
+  <label class="block text-gray-700 font-medium mb-2">Address</label>
+  <textarea id="userAddress" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Enter your address"></textarea>
+</div>
+
+                
+                <button id="confirmBooking" class="w-full bg-blue-600 text-white p-3 rounded-lg font-medium hover:bg-blue-700 transition">Confirm Appointment</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Confirmation Toast -->
+    <div id="confirmationToast" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-10 opacity-0 transition flex items-center z-50">
+        <i class="fas fa-check-circle mr-3 text-xl"></i>
+        <span>Appointment booked successfully!</span>
+    </div>
+
+    <script>
+        // Booking Modal Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookButtons = document.querySelectorAll('.book-btn');
+            const bookingModal = document.getElementById('bookingModal');
+            const closeModal = document.getElementById('closeModal');
+            const modalDoctorName = document.getElementById('modalDoctorName');
+            const timeSlots = document.querySelectorAll('.time-slot');
+            const confirmBooking = document.getElementById('confirmBooking');
+            const confirmationToast = document.getElementById('confirmationToast');
+            const appointmentsSection = document.getElementById('previousAppointments');
+            const toggleBtn = document.getElementById('toggleAppointmentsBtn'); 
+
+            
+            // Open modal when book button is clicked
+            bookButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const doctorName = this.getAttribute('data-doctor');
+                    modalDoctorName.textContent = `Book Appointment with ${doctorName}`;
+                    
+                    // Reset selected time slot
+                    timeSlots.forEach(slot => {
+                        slot.classList.remove('selected');
+                    });
+                    
+                    // Show modal
+                    bookingModal.classList.remove('opacity-0', 'pointer-events-none');
+                    bookingModal.classList.add('opacity-100', 'pointer-events-auto');
+                });
+            });
+            
+            // Close modal
+            closeModal.addEventListener('click', function() {
+                bookingModal.classList.remove('opacity-100', 'pointer-events-auto');
+                bookingModal.classList.add('opacity-0', 'pointer-events-none');
+            });
+            
+            // Time slot selection
+            timeSlots.forEach(slot => {
+                slot.addEventListener('click', function() {
+                    // Remove selected class from all slots
+                    timeSlots.forEach(s => {
+                        s.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked slot
+                    this.classList.add('selected');
+                });
+            });
+            
+            confirmBooking.addEventListener('click', function () {
+    const selectedSlot = document.querySelector('.time-slot.selected');
+    const appointmentDate = document.getElementById('appointmentDate').value;
+    const doctorName = modalDoctorName.textContent.replace('Book Appointment with ', '');
+
+    if (!appointmentDate) {
+        alert('Please select a date for your appointment.');
+        return;
+    }
+
+    if (!selectedSlot) {
+        alert('Please select a time slot for your appointment.');
+        return;
+    }
+
+    // ✅ Corrected ID here
+    const appointmentList = document.getElementById('appointmentsList');
+    const li = document.createElement('li');
+    li.className = "bg-white p-4 rounded-xl shadow";
+    li.innerHTML = `
+        <strong>Doctor:</strong> ${doctorName}<br>
+        <strong>Date:</strong> ${appointmentDate}<br>
+        <strong>Time:</strong> ${selectedSlot.textContent}
+    `;
+    appointmentList.prepend(li); // add to top
+
+    // ✅ Show the appointments section automatically
+    appointmentsSection.classList.remove('hidden');
+    toggleBtn.textContent = 'Hide Previous Appointments';
+
+    // Close modal
+    bookingModal.classList.remove('opacity-100', 'pointer-events-auto');
+    bookingModal.classList.add('opacity-0', 'pointer-events-none');
+
+    // Show toast
+    confirmationToast.classList.remove('opacity-0', 'translate-y-10');
+    confirmationToast.classList.add('opacity-100', 'translate-y-0');
+
+    setTimeout(() => {
+        confirmationToast.classList.remove('opacity-100', 'translate-y-0');
+        confirmationToast.classList.add('opacity-0', 'translate-y-10');
+    }, 3000);
+});
+
+
+            
+            // Close modal when clicking outside
+            bookingModal.addEventListener('click', function(e) {
+                if (e.target === bookingModal) {
+                    bookingModal.classList.remove('opacity-100', 'pointer-events-auto');
+                    bookingModal.classList.add('opacity-0', 'pointer-events-none');
+                }
+            });
+            
+            // Set minimum date for appointment (today)
+            const today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const yyyy = today.getFullYear();
+            const minDate = yyyy + '-' + mm + '-' + dd;
+            document.getElementById('appointmentDate').setAttribute('min', minDate);
+        });
+    </script>
+
+    <script>
+  const toggleBtn = document.getElementById('toggleAppointmentsBtn');
+ const appointmentList = document.getElementById('appointmentsList');
+ const appointmentsSection = document.getElementById('previousAppointments');
+
+
+  toggleBtn.addEventListener('click', function () {
+    const isHidden = appointmentsSection.classList.contains('hidden');
+
+    if (isHidden) {
+      appointmentsSection.classList.remove('hidden');
+      toggleBtn.textContent = 'Hide Previous Appointments';
+    } else {
+      appointmentsSection.classList.add('hidden');
+      toggleBtn.textContent = 'Show Previous Appointments';
+    }
+  });
+</script>
+
+    <script>
+  // Handle login form submit
+ document.getElementById("loginForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!email || !password) {
+    alert("Please enter both email and password.");
+  } else {
+    alert("Logged in successfully as: " + email);
+
+    // 👇 Show user details form
+    document.getElementById("userDetailsSection").classList.remove("hidden");
+    document.getElementById("userDetailsSection").scrollIntoView({ behavior: "smooth" });
+  }
+});
+
+</script>
+
+</body>
+</html>
